@@ -1,0 +1,15 @@
+set statusbar-h-padding o
+set statusbar-v-padding o
+set page-padding 5
+map r reload
+map R rotate
+map i recolor
+map p print
+map ñ command
+set default-bg \#394739
+set default-fg \#DE1AB4
+set scroll-step 80
+set recolor-lightcolor \#3A362F
+set recolor-darkcolor  \#FFFFFF
+set selection-clipboard clipboard
+

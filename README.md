@@ -11,7 +11,6 @@ Here you can find my dotfiles for
 * alacritty
 * fish
 * htop
-* luakit
 * zathura
 * ranger
 * cli-vis

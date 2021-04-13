@@ -16,7 +16,11 @@ Here you can find my dotfiles for
 
 Most of the code you'll find here have been copied from several respositories, some of them are
 
-* !(Awesome WM Widgets)[https://pavelmakhov.com/awesome-wm-widgets/#tabMain]
-*
-*
-*
+* https://pavelmakhov.com/awesome-wm-widgets/#tabMain
+* https://github.com/lcpz/awesome-copycats
+* https://github.com/chjj/compton
+* https://github.com/dpayne/cli-visualizer
+
+Also, I have use the Awesome WM https://awesomewm.org/doc/api/index.html
+
+**Warning:** Porbably most of the files you'll find here won't work on your machine. Please check the code before using it.

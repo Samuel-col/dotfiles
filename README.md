@@ -14,7 +14,7 @@ Here you can find my dotfiles for
 * luakit
 * zathura
 * ranger
-* vis
+* cli-vis
 
 Most of the code you'll find here have been copied from several respositories, some of them are
 

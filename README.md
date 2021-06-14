@@ -24,4 +24,4 @@ Most of the code you'll find here have been copied from several respositories, s
 
 Also, I have used the [Awesome WM documentation](https://awesomewm.org/doc/api/index.html)
 
-**Warning:** Porbably most of the files you'll find here won't work on your machine. Please check the code before using it.
+**Warning:** Probably most of the files you'll find here won't work on your machine. Please check the code before using them.

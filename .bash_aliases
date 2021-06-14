@@ -1,0 +1,11 @@
+alias la="ls -lah"
+alias uni="cd /Archivos/A/Universidad/"
+alias p="sudo"
+alias please="sudo"
+alias cmatrix="cmatrix -C yellow"
+alias e="exit"
+alias android="jmtpfs"
+alias uandroid="fusermount -u"
+alias cl="clear"
+alias lua="lua -i -e \"st = require'stats';mat = require'matrix'\""
+

@@ -15,12 +15,16 @@ alias cmatrix="cmatrix -C yellow"
 alias android="jmtpfs"
 alias uandroid="fusermount -u"
 alias cl="clear"
+alias uni="cd /Archivos/A/Universidad/"
+alias lua="lua -i -e \"st=require'stats';mat=require'matrix'\""
+alias ZZ="cd .."
 
 #Variables
 set EDITOR "vim"
 set BROWSER "firefox-esr"
-set PATH /home/samuel/julia-1.5.3/bin:$PATH:/home/samuel/.local/bin
+set PATH /home/samuel/julia-1.5.3/bin:$PATH:/home/samuel/.local/bin:/Archivos/A/R/R-3.6.3/bin/gen
 # sourc "$HOME/.cargo/env"
 
 #Arranque
 neofetch
+

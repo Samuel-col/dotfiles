@@ -1,0 +1,18 @@
+#!/bin/bash
+a="/Archivos/A/Imágenes/Fondos_de_Pantalla/"
+fond=("wp17.jpg" "wp18.jpg" "wp19.jpg" "wp23.jpg" "wp24.jpg" "wp27.jpg" "wp28.jpg" "wp32.jpg" "wp31_bien.jpg" "wp33.jpg" "wp34.jpg" "wp35.jpg" "wp35.jpg" "wp35.jpg" "wp36.jpg" "bw1.png" "bw1.png")
+while :
+do
+    t=$((RANDOM%17))
+    fot=${fond[t]}
+    com=$a$fot
+    if [ $t -eq 16 ] 
+    then
+	feh --bg-max $com
+	mantablockscreen -i $com
+    else
+	feh --bg-fill $com
+	mantablockscreen -i $com
+    fi
+    sleep 600
+done

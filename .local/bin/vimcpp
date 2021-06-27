@@ -1,0 +1,25 @@
+#!/bin/bash
+
+#Solicitar el nombre
+if [ -z "$1" ]; then
+    echo "Error, se debe especificar un nombre."
+    exit
+fi
+nombre=$1
+
+#Solicitar el editor
+if [ -z "$2" ]; then
+    editor=vim
+else
+    editor="$2"
+fi
+
+#Solicitar la plantilla
+if [ -z "$3" ]; then
+    plantilla="/home/samuel/Plantillas/plantilla.cpp"
+else
+    plantilla="$3"
+fi
+
+cp $plantilla "$nombre".cpp
+$editor "$nombre".cpp

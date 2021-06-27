@@ -1,3 +1,4 @@
+alias ZZ="cd .."
 alias la="ls -lah"
 alias uni="cd /Archivos/A/Universidad/"
 alias p="sudo"

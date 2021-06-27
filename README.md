@@ -14,6 +14,7 @@ Here you can find my dotfiles for
 * zathura
 * ranger
 * cli-vis
+* bash
 
 Most of the code you'll find here have been copied from several respositories, some of them are
 

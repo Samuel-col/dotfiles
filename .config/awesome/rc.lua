@@ -29,6 +29,8 @@ local xrandr = require("xrandr")
 -- local debian = require("debian.menu")
 local has_fdo, freedesktop = pcall(require, "freedesktop")
 
+awful.spawn.with_shell("xrandr --output eDP1 --auto --output HDMI1 --auto --brightness 0.5 --left-of eDP1")
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -190,7 +192,6 @@ local function set_wallpaper(s)
     end
 end
 
-awful.spawn.with_shell("xrandr --output eDP1 --auto --output HDMI1 --auto --brightness 0.5 --left-of eDP1")
 
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
@@ -771,20 +772,24 @@ globalkeys = gears.table.join(
 	      {description = "Abre zathura", group = "client"}),
     awful.key({ modkey, "Shift"	  }, "b", function() awful.spawn.with_shell("luakit") end,
 	      {description = "Abre luakit", group = "client"}),
-    awful.key({			  }, "XF86MonBrightnessDown", function () 
-						local handle = io.popen("xbacklight -get")
-						local brillo = handle:read("*a")
-						handle:close()
-						local step = math.max(brillo*0.13+0.5,1)
-						os.execute("xbacklight -dec "..step) end,
-              {description = "Bajar el brillo", group = "screen"}),
-    awful.key({			  }, "XF86MonBrightnessUp", function () 
-						local handle = io.popen("xbacklight -get")
-						local brillo = handle:read("*a")
-						handle:close()
-						local step = math.max(brillo*0.13+0.5,1)
-						os.execute("xbacklight -inc "..step) end,
-              {description = "Subir el brillo", group = "screen"}),
+    -- awful.key({			  }, "XF86MonBrightnessDown", function () 
+		-- 				local handle = io.popen("xbacklight -get")
+		-- 				local brillo = handle:read("*a")
+		-- 				handle:close()
+		-- 				local step = math.max(brillo*0.13+0.5,1)
+		-- 				os.execute("xbacklight -dec "..step) end,
+    --           {description = "Bajar el brillo", group = "screen"}),
+    -- awful.key({			  }, "XF86MonBrightnessUp", function () 
+		-- 				local handle = io.popen("xbacklight -get")
+		-- 				local brillo = handle:read("*a")
+		-- 				handle:close()
+		-- 				local step = math.max(brillo*0.13+0.5,1)
+		-- 				os.execute("xbacklight -inc "..step) end,
+    --           {description = "Subir el brillo", group = "screen"}),
+		awful.key({  }, "XF86MonBrightnessDown", function () awful.util.spawn("xbacklight -dec 2") end,
+						{description = "Bajar el brillo", group = "screen"}),
+		awful.key({  }, "XF86MonBrightnessUp", function () awful.util.spawn("xbacklight -inc 2") end,
+						{description = "Subir el brillo", group = "screen"}),
     awful.key({ }, "XF86AudioRaiseVolume", function ()  awful.util.spawn("amixer set Master 5%+") end,
               {description = "Subir el volumen", group = "sonido" }),
     awful.key({ }, "XF86AudioLowerVolume", function ()  awful.util.spawn("amixer set Master 5%-") end,

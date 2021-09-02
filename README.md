@@ -18,10 +18,10 @@ Here you can find my dotfiles for
 
 Most of the code you'll find here have been copied from several respositories, some of them are
 
-* https://pavelmakhov.com/awesome-wm-widgets/#tabMain
-* https://github.com/lcpz/awesome-copycats
-* https://github.com/chjj/compton
-* https://github.com/dpayne/cli-visualizer
+* [AwesomeWM Widgets](https://pavelmakhov.com/awesome-wm-widgets/#tabMain)
+* [Awesome copycats](https://github.com/lcpz/awesome-copycats)
+* [Compton](https://github.com/chjj/compton)
+* [Cli Visualizer](https://github.com/dpayne/cli-visualizer)
 
 Also, I have used the [Awesome WM documentation](https://awesomewm.org/doc/api/index.html).
 

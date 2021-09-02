@@ -528,7 +528,7 @@ local lambdaw =  wibox.widget{
 lambdaw:connect_signal("button::press",function () myscreen = awful.screen.focused()
     myscreen.proc_temp.visible = not myscreen.proc_temp.visible end)
 local debianw =wibox.widget{
-		image = "/Archivos/A/Imágenes/debian-amarillo.png",
+		image = pwd.."debian-amarillo.png",
 		resize = true,
 		widget = wibox.widget.imagebox
 	    }

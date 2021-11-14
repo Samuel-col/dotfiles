@@ -417,10 +417,14 @@ local cw = calendar_widget({
     theme = 'outrun',
     placement = 'topright'
     })
-mytextclock:connect_signal("button::press",
-    function(_, _, _, button)
-        if button == 1 then cw.toggle() end
-    end)
+
+-- mytextclock:connect_signal("button::press",
+--     function(_, _, _, button)
+--         if button == 1 then cw.toggle() end
+--     end)
+
+-- mytextclock:connect_signal("button::press",function() awful.spawn.with_shell("alacritty -e \"cal -y\"") end)
+
 --logout
 -- local logout_menu_widget = require("awesome-wm-widgets.logout-menu-widget.logout-menu")
 -- ALSA volume
@@ -436,6 +440,8 @@ mitema.volume = lain.widget.alsa({
         widget:set_markup(markup.fontfg(mitema.font, "#7493d2", volume_now.level .. "% "))
     end
 })
+volicon:connect_signal("button::press", function() awful.spawn.with_shell("pavucontrol") end)
+mitema.volume.widget:connect_signal("button::press", function() awful.spawn.with_shell("pavucontrol") end)
 
 -- Net
 mitema.widget_netdown = pwd.."themes/multicolor/icons/net_down.png"
@@ -458,6 +464,11 @@ local memory = lain.widget.mem({
         widget:set_markup(markup.fontfg(mitema.font, "#e0da37", mem_now.used .. "M "))
     end
 })
+
+memicon:connect_signal("button::press",function() awful.spawn.with_shell("alacritty -e htop")end)
+memory.widget:connect_signal("button::press",function() awful.spawn.with_shell("alacritty -e htop")end)
+
+
 -- Conexión a internet
 s.red_status=awful.popup{
     widget={
@@ -536,13 +547,13 @@ local debianw =wibox.widget{
 -- Logos Apps
 
 		local apps = {}
-    -- Pavucontrol
-    apps.pavu = wibox.widget{
-				image = pwd.."apps/pavu.png",
+    -- Brave browser
+    apps.brav = wibox.widget{
+				image = pwd.."apps/brave-logo.png",
 				resize = true,
 				widget = wibox.widget.imagebox
 		}
-		apps.pavu:connect_signal("button::press", function() awful.spawn.with_shell("pavucontrol") end)
+		apps.brav:connect_signal("button::press", function() awful.spawn.with_shell("brave-browser") end)
 		
 		-- Audacity
 		apps.auda = wibox.widget{
@@ -578,13 +589,13 @@ local debianw =wibox.widget{
 		apps.atom:connect_signal("button::press",function() awful.spawn.with_shell("atom") end)
 		
 
-		-- Octave
-		apps.octa = wibox.widget{
-				image = pwd.."apps/octave.png",
+		-- Julia
+		apps.juli = wibox.widget{
+				image = pwd.."apps/julia.svg",
 				resize = true,
 				widget = wibox.widget.imagebox
 		}
-		apps.octa:connect_signal("button::press",function() awful.spawn.with_shell("octave --gui") end)
+		apps.juli:connect_signal("button::press",function() awful.spawn("alacritty -o background_opacity=0.8 -e /home/samuel/julia-1.6.3/bin/julia",{floating=true}) end)
 		
 
 		-- Gimp
@@ -630,12 +641,12 @@ local debianw =wibox.widget{
 				-- vertical_homogeneous = false,
 		    layout = wibox.layout.grid.vertical
 		}
-		appsGrid:add_widget_at(apps.pavu,1,1,1,1)
+		appsGrid:add_widget_at(apps.brav,1,1,1,1)
 		appsGrid:add_widget_at(apps.auda,1,2,1,1)
 		appsGrid:add_widget_at(apps.rstu,1,3,1,1)
 		appsGrid:add_widget_at(apps.zoom,2,1,1,1)
 		appsGrid:add_widget_at(apps.atom,2,2,1,1)
-		appsGrid:add_widget_at(apps.octa,2,3,1,1)
+		appsGrid:add_widget_at(apps.juli,2,3,1,1)
 		appsGrid:add_widget_at(apps.gimp,3,1,1,1)
 		appsGrid:add_widget_at(apps.libr,3,2,1,1)
 		appsGrid:add_widget_at(apps.tele,3,3,1,1)
@@ -1211,6 +1222,8 @@ awful.rules.rules = {
     -- Set Firefox to always map on the tag named "2" on screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { screen = 1, tag = "2" } },
+		-- {rule = {class = "Alacritty" },
+		-- 		properties = {screen = awful.screen.focused()} },
 }
 -- }}}
 
@@ -1283,7 +1296,14 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 
 --ejecutar al arrancar
 awful.spawn.with_shell("compton --config /home/samuel/.config/compton/compton.conf")
-awful.spawn.with_shell("redshift -t 6700:4500 -l 4.67:-70.06")
+---- REDSHIFT
+local reds = io.popen("pidof redshift")
+local ejecutando = reds:read("*a")
+reds:close()
+if ejecutando=="" then
+		awful.spawn.with_shell("redshift -t 6700:4500 -l 4.67:-70.06")
+end
+----
 awful.spawn.with_shell("/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1")
 awful.spawn.with_shell("nitrogen --restore")
 

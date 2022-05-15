@@ -29,7 +29,7 @@ local xrandr = require("xrandr")
 -- local debian = require("debian.menu")
 local has_fdo, freedesktop = pcall(require, "freedesktop")
 
-awful.spawn.with_shell("xrandr --output eDP1 --auto --output HDMI1 --auto --brightness 0.5 --left-of eDP1")
+-- awful.spawn.with_shell("xrandr --output eDP1 --auto --output HDMI1 --auto --brightness 0.5 --left-of eDP1")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -65,7 +65,9 @@ local pwd = "/home/samuel/.config/awesome/"
 beautiful.init(pwd .. "themes/zenburn/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "alacritty -e \"fish\""
+-- terminal = "alacritty -e \"fish\""
+-- terminal = "alacritty -e \"nu\""
+terminal = "alacritty"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. "vim"
 
@@ -477,7 +479,7 @@ s.red_status=awful.popup{
 	widget =wibox.container.margin
     },
     -- border_color='#00f3cb',
-    border_color=beautiful.bg_focus,
+    border_color=beautiful.border_focus,
     border_width=1,
     placement=awful.placement.top,
     shape = gears.shape.rounded_rect,
@@ -497,7 +499,7 @@ s.proc_temp=awful.popup{
 	margins=7,
 	widget=wibox.container.margin
     },
-    border_color=beautiful.bg_focus,
+    border_color=beautiful.border_focus,
     border_width=1,
     placement=awful.placement.top,
     shape = gears.shape.rounded_rect,
@@ -527,6 +529,7 @@ local betaw =  wibox.widget{
 		markup = "<span foreground=\"#F68F03\" size=\"large\"> <b>  β </b> </span>",
 		valign = "center",
 		widget = wibox.widget.textbox,
+		opacity = beautiful.widget_fg_opacity,
 	    }
 betaw:connect_signal("button::press",function () myscreen = awful.screen.focused()
     myscreen.red_status.visible = not myscreen.red_status.visible end)
@@ -534,19 +537,24 @@ betaw:connect_signal("button::press",function () myscreen = awful.screen.focused
 local lambdaw =  wibox.widget{
 		markup = "<span foreground=\"#F68F03\" size=\"large\"> <b> λ  </b> </span>",
 		valign = "center",
-		widget = wibox.widget.textbox
+		widget = wibox.widget.textbox,
+		opacity = beautiful.widget_fg_opacity,
 	    }
 lambdaw:connect_signal("button::press",function () myscreen = awful.screen.focused()
     myscreen.proc_temp.visible = not myscreen.proc_temp.visible end)
 local debianw =wibox.widget{
 		image = pwd.."debian-amarillo.png",
 		resize = true,
-		widget = wibox.widget.imagebox
+		widget = wibox.widget.imagebox,
+		opacity = beautiful.widget_fg_opacity,
 	    }
 
 -- Logos Apps
 
 		local apps = {}
+		-- vacío
+		-- apps.empt = wibox.widget{}
+
     -- Brave browser
     apps.brav = wibox.widget{
 				image = pwd.."apps/brave-logo.png",
@@ -554,6 +562,15 @@ local debianw =wibox.widget{
 				widget = wibox.widget.imagebox
 		}
 		apps.brav:connect_signal("button::press", function() awful.spawn.with_shell("brave-browser") end)
+		
+
+		-- Okular
+		apps.okul = wibox.widget{
+				image = pwd.."apps/okular.png",
+				resize = true,
+				widget = wibox.widget.imagebox
+		}
+		apps.okul:connect_signal("button::press", function() awful.spawn.with_shell("okular") end)
 		
 		-- Audacity
 		apps.auda = wibox.widget{
@@ -595,16 +612,17 @@ local debianw =wibox.widget{
 				resize = true,
 				widget = wibox.widget.imagebox
 		}
-		apps.juli:connect_signal("button::press",function() awful.spawn("alacritty -o background_opacity=0.8 -e /home/samuel/julia-1.6.3/bin/julia",{floating=true}) end)
+		-- apps.juli:connect_signal("button::press",function() awful.spawn("alacritty -o opacity=0.8 -e /home/samuel/julia-1.7.0/bin/julia",{floating=true}) end)
+		apps.juli:connect_signal("button::press",function() awful.spawn("alacritty -o opacity=0.8 -e julia",{floating=true}) end)
 		
 
-		-- Gimp
+		-- Opera
 		apps.gimp = wibox.widget{
-				image = pwd.."apps/gimp.png",
+				image = pwd.."apps/opera.png",
 				resize = true,
 				widget = wibox.widget.imagebox
 		}
-		apps.gimp:connect_signal("button::press",function() awful.spawn.with_shell("gimp") end)
+		apps.gimp:connect_signal("button::press",function() awful.spawn.with_shell("opera") end)
 		
 
 		-- Libre Office
@@ -627,37 +645,44 @@ local debianw =wibox.widget{
 
 
     local appsGrid = wibox.widget{
-			  forced_num_cols = 3,
-			  forced_num_rows = 3,
-			  -- min_cols_size = 10,
-			  -- min_rows_size = 10,
-			  spacing = 20,
-				superpose = true,
-				expand = true,
-			  -- homogeneous = false,
-				forced_height = 70,
-				forced_width = 70,
-				-- horizontal_homogeneous = false,
-				-- vertical_homogeneous = false,
-		    layout = wibox.layout.grid.vertical
-		}
-		appsGrid:add_widget_at(apps.brav,1,1,1,1)
-		appsGrid:add_widget_at(apps.auda,1,2,1,1)
-		appsGrid:add_widget_at(apps.rstu,1,3,1,1)
-		appsGrid:add_widget_at(apps.zoom,2,1,1,1)
-		appsGrid:add_widget_at(apps.atom,2,2,1,1)
-		appsGrid:add_widget_at(apps.juli,2,3,1,1)
-		appsGrid:add_widget_at(apps.gimp,3,1,1,1)
-		appsGrid:add_widget_at(apps.libr,3,2,1,1)
-		appsGrid:add_widget_at(apps.tele,3,3,1,1)
+		forced_num_cols = 3,
+		forced_num_rows = 3,
+		-- min_cols_size = 10,
+		-- min_rows_size = 10,
+		spacing = 30,
+		-- max_cols_size = 40,
+		-- max_rows_size = 40,
+		superpose = true,
+		expand = true,
+		-- homogeneous = false,
+		forced_height = 70,
+		forced_width = 70,
+		-- horizontal_homogeneous = false,
+		-- vertical_homogeneous = false,
+		layout = wibox.layout.grid.vertical
+		-- width=280,
+		-- height=280
+	}
+	
+	-- appsGrid:add_widget_at(apps.okul,1,1,1,1)
+	-- appsGrid:add_widget_at(apps.auda,1,2,1,1)
+	appsGrid:add_widget_at(apps.rstu,1,2,1,1)
+	-- appsGrid:add_widget_at(apps.zoom,2,1,1,1)
+	appsGrid:add_widget_at(apps.atom,2,2,1,1)
+	appsGrid:add_widget_at(apps.juli,2,3,1,1)
+	-- appsGrid:add_widget_at(apps.gimp,3,1,1,1)
+	appsGrid:add_widget_at(apps.libr,3,2,1,1)
+	appsGrid:add_widget_at(apps.tele,2,1,1,1)
 
   -- Crear wibox 1
   s.mywibox1=wibox({
       -- position="bottom",
       screen=s,
-      opacity=1.0,
+      -- opacity=1.0,
+      -- opacity=0.8,
+      opacity= beautiful.widget_bg_opacity,
       -- bg='#1E0E33',
-      bg = beautiful.bg_normal,
+      bg = beautiful.bg_normal.."50",
       --bg = '#06095F',
       shape=function (cr,width,height)
           gears.shape.partially_rounded_rect (cr,width,height,false,false,true,false,20)
@@ -678,9 +703,11 @@ local debianw =wibox.widget{
     s.mywibox2=wibox({
 				-- position="top",
 				screen=s,
-				opacity=1.0,
+				-- opacity=1.0,
+				-- opacity=0.8,
+        opacity= beautiful.widget_bg_opacity,
 				-- bg='#1E0E33',
-				bg = beautiful.bg_normal,
+				bg = beautiful.bg_normal.."50",
 				shape=function (cr,width,height)
 				    gears.shape.partially_rounded_rect (cr,width,height,false,false,false,true,20)
 				end,
@@ -701,51 +728,84 @@ local debianw =wibox.widget{
 				position="top",
 				opacity=0,
 				width=100,
-				height=24,
+				height=20,
 				border_width=0,
 				border_color='#ffffff00',
 				visible=true,
 				ontop=true
     })
 
-		-- Crear wibox 4
-		-- s.mywibox4 = awful.wibar({
-		-- 				screen = s,
-		-- 				position = "right",
-		-- 				opacity = 0.9,
-		-- 				width = 500,
-		-- 				height = 350,
-		-- 				border_width = 0,
-		-- 				bg = beautiful.bg_normal,
-		-- 				fg = beautiful.fg_normal,
-		-- 				visible = false,
-		-- 				ontop = true,
-		-- 				shape = function(cr,width,height)
-		-- 						gears.shape.partially_rounded_rect(cr,width,height,true,false,false,true,20)
-		-- 				end,
-		-- 		})
 
 		-- Crear wibox 4 (Apps)
-		s.mywibox4=awful.wibar({
-				screen = s,
-				position = "left",
-				opacity = 0.9,
-				width = 250,
-				height = 200,
-				border_width = 25,
-				-- border_color = beautiful.bg_normal,
-				border_color = "#790C6C",
-				visible = false,
-				-- bg = beautiful.bg_normal,
-				bg = "#790C6C",
-				ontop = true,
-				shape=function (cr,width,height)
-				    gears.shape.partially_rounded_rect (cr,width,height,false,true,true,false,60)
-				end,
+		-- s.mywibox4=awful.wibar({
+		-- 		screen = s,
+		-- 		position = "left",
+		-- 		opacity = 1.0,
+		-- 		width = 250,
+		-- 		height = 250,
+		-- 		border_width = 25,
+		-- 		-- border_color = beautiful.bg_normal,
+		-- 		border_color = "#790C6C",
+		-- 		visible = true,
+		-- 		-- bg = beautiful.bg_normal,
+		-- 		bg = "#790C6C",
+		-- 		ontop = true,
+		-- 		shape=function (cr,width,height)
+		-- 			-- gears.shape.partially_rounded_rect (cr,width,height,false,true,true,false,60)
+		-- 			gears.shape.octogon(cr,width,height,150)
+		-- 		-- gears.shape.rounded_rect(cr,width,height,60)
+		-- 		end,
+		-- 		-- x=s.geometry.x+math.floor(s.geometry.width/2)-125,
+		-- 		-- y=s.geometry.y-math.floor(s.geometry.height/2)+100
+		-- })
 
-		})
+		-- s.mywibox4=awful.wibar({
+				-- screen = s,
+				-- position = "left",
+				-- opacity = 1.0,
+				-- width = 250,
+				-- height = 200,
+				-- border_width = 25,
+				-- border_color = beautiful.bg_normal,
+				-- border_color = "#790C6C",
+				-- visible = false,
+				-- bg = beautiful.bg_normal,
+				-- bg = "#790C6C",
+				-- ontop = true,
+				-- shape=function (cr,width,height)
+				--     gears.shape.partially_rounded_rect (cr,width,height,false,true,true,false,60)
+				-- gears.shape.rounded_rect(cr,width,height,60)
+				-- end,
+				-- x=s.geometry.x+math.floor(s.geometry.width/2)-125,
+				-- y=s.geometry.y-math.floor(s.geometry.height/2)+100
+		-- })
+
+	local apps_diameter = 250
+	s.mywibox4= awful.popup{
+		widget = {appsGrid,
+			layout = wibox.layout.flex.vertical,
+			-- margins = 4,
+			-- widget = wibox.container.margin
+				},
+		screen = s,
+		opacity = 1.0,
+		width = apps_diameter,
+		minimum_width=apps_diameter,
+		minimum_height=apps_diameter,
+		height = apps_diameter,
+		border_width = 20,
+		border_color = "#790C6C",
+		visible = false,
+		bg = "#790C6C",
+		ontop = true,
+		shape=function (cr,width)
+			gears.shape.octogon(cr,width,width,width/2.5)end,
+		placement = awful.placement.centered
+	}
+
 
 s.mywibox4:connect_signal("button::press",function () myscreen = awful.screen.focused()
+    -- myscreen.mywibox4.visible = not myscreen.mywibox4.visible end)
     myscreen.mywibox4.visible = not myscreen.mywibox4.visible end)
 
 
@@ -808,32 +868,18 @@ s.mywibox4:connect_signal("button::press",function () myscreen = awful.screen.fo
        }
    }
 
-	 s.mywibox4:setup {
-			 -- Rejilla
-       layout = wibox.layout.flex.vertical,
-			 appsGrid,
-	}
+	-- s.mywibox4:setup {
+	-- 		 -- Rejilla
+    --   layout = wibox.layout.stack,
+	--   appsGrid,
+	-- }
 					
 					
 					
-  --  s.mywibox4:add(
-  -- 		 wibox.widget {
-	-- 		 image = "apps/pavu.png",
-	-- 		 resize = true,
-	-- 		 widget = wibox.widget.imagebox
-	-- 		 }
-	-- 	)
-
-		-- s.mywibox4:setup {
-		-- 		layout = wibox.layout.align.horizontal,
-		-- 		nil,
-		-- 		s.mypromptbox,
-		-- 		nil				
-		-- }
-
 end)
 -- }}}
 
+local bgHDMI1 = 0.7
 local pos = 4 --[[
  1: portatil
  2: lg
@@ -899,6 +945,8 @@ globalkeys = gears.table.join(
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
+    -- awful.key({ modkey,           }, "Return", function () awful.spawn.with_shell(terminal) end,
+    --           {description = "open a terminal", group = "launcher"}),
     awful.key({ modkey, "Shift"   }, "Return", function () awful.spawn.with_shell("alacritty") end,
               {description = "open a terminal", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
@@ -912,11 +960,11 @@ globalkeys = gears.table.join(
 	      {description = "abre rofi launcher", group = "launcher"}),
     awful.key({ modkey, "Shift"	  }, "g", function () awful.spawn.with_shell("rofi -show-icons -no-plugins -modi \"drun\" -show drun -theme sidebar.rasi -drun-icon-theme kora -terminal alacritty") end,
 	      {description = "abre rofi launcher grande", group = "launcher"}),
-    awful.key({		  }, "Print", function() awful.spawn.with_shell("gnome-screenshot") end,
+    awful.key({		  }, "Print", function() awful.spawn.with_shell("screengrab -f") end,
 	      {description = "Captura total de pantalla", group = "screen"}),
-    awful.key({ "Shift"	  }, "Print", function() awful.spawn.with_shell("gnome-screenshot -a") end,
+    awful.key({ "Shift"	  }, "Print", function() awful.spawn.with_shell("screengrab -r") end,
 	      {description = "Captura de área de pantalla", group = "screen"}),
-    awful.key({"Control", "Shift" }, "Print", function() awful.spawn.with_shell("gnome-screenshot -w") end,
+    awful.key({"Control", "Shift" }, "Print", function() awful.spawn.with_shell("screengrab -a") end,
 	      {description = "Capturar ventana actual", group = "screen"}),
 --     awful.key({ }, "Lock", function() awful.spawn.with_shell("i3lock -e -t -i /Archivos/A/Imágenes/Fondos\\ de\\ Pantalla/colorful_5-wallpaper-1366x768.png") end,
 -- 	      {description = "Bloquear Pantalla", group = "screen"}),
@@ -928,6 +976,8 @@ globalkeys = gears.table.join(
 	      {description = "Abre firefox", group = "client"}),
     awful.key({ modkey,		  }, "z", function() awful.spawn.with_shell("zathura") end,
 	      {description = "Abre zathura", group = "client"}),
+    awful.key({ modkey,	"Shift"	  }, "z", function() awful.spawn.with_shell("okular") end,
+	      {description = "Abre okular", group = "client"}),
     awful.key({ modkey, "Shift"	  }, "b", function() awful.spawn.with_shell("luakit") end,
 	      {description = "Abre luakit", group = "client"}),
     -- awful.key({			  }, "XF86MonBrightnessDown", function () 
@@ -945,18 +995,34 @@ globalkeys = gears.table.join(
 		-- 				os.execute("xbacklight -inc "..step) end,
     --           {description = "Subir el brillo", group = "screen"}),
 		awful.key({  }, "XF86MonBrightnessDown", function () awful.util.spawn("xbacklight -dec 2") end,
-						{description = "Bajar el brillo", group = "screen"}),
+						{description = "Bajar el brillo eDP1", group = "screen"}),
 		awful.key({  }, "XF86MonBrightnessUp", function () awful.util.spawn("xbacklight -inc 2") end,
-						{description = "Subir el brillo", group = "screen"}),
+						{description = "Subir el brillo eDP1", group = "screen"}),
+		awful.key({"Shift"  }, "XF86MonBrightnessUp", function (brHDMI1)
+										if brHDMI1 < 0.98 then
+												brHDMI1 = brHDMI1 + 0.02
+										end
+										awful.util.spawn("xrandr --brightness "..brHDMI1) end,
+						{description = "Subir el brillo HDMI1", group = "screen"}),
+		awful.key({ "Shift" }, "XF86MonBrightnessDown", function (brHDMI1) 
+										if brHDMI1 > 0.02 then
+												brHDMI1 = brHDMI1 - 0.02
+										end
+										awful.util.spawn("xrandr --brightness "..brHDMI1) end,
+						{description = "Bajar el brillo HDMI1", group = "screen"}),
     awful.key({ }, "XF86AudioRaiseVolume", function ()  awful.util.spawn("amixer set Master 5%+") end,
               {description = "Subir el volumen", group = "sonido" }),
     awful.key({ }, "XF86AudioLowerVolume", function ()  awful.util.spawn("amixer set Master 5%-") end,
               {description = "Bajar el volumen", group = "sonido" }),
     awful.key({ }, "XF86AudioMute", function ()         awful.util.spawn("amixer sset Master toggle") end,
               {description = "Silenciar", group = "sonido"}),
-    awful.key({ }, "XF86AudioMicMute", function () awful.util.spawn("amixer set Capture nocap") end,
+    -- awful.key({ }, "XF86AudioMicMute", function () awful.util.spawn("amixer set Capture nocap") end,
+    --           {description = "Cerrar el micrófono", group = "sonido"}),
+    -- awful.key({ "Shift" }, "XF86AudioMicMute", function () awful.util.spawn("amixer set Capture cap") end,
+    --           {description = "Abrir el micrófono", group = "sonido"}),
+    awful.key({ modkey }, "t", function () awful.util.spawn("amixer set Capture nocap") end,
               {description = "Cerrar el micrófono", group = "sonido"}),
-    awful.key({ "Shift" }, "XF86AudioMicMute", function () awful.util.spawn("amixer set Capture cap") end,
+    awful.key({ modkey, "Shift" }, "t", function () awful.util.spawn("amixer set Capture cap") end,
               {description = "Abrir el micrófono", group = "sonido"}),
     awful.key({ modkey,		  }, "e", function () awful.spawn.with_shell("alacritty -e ranger") end,
 	      {description = "Abre el explorador de archivos", group = "launcher"}),
@@ -1062,8 +1128,8 @@ clientkeys = gears.table.join(
               {description = "move to master", group = "client"}),
     awful.key({ modkey,           }, "o",      function (c) c:move_to_screen()               end,
               {description = "move to screen", group = "client"}),
-    awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end,
-              {description = "toggle keep on top", group = "client"}),
+    -- awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end,
+    --           {description = "toggle keep on top", group = "client"}),
     awful.key({ modkey,           }, "n",
         function (c)
             -- The client currently has the input focus, so it cannot be
@@ -1301,11 +1367,12 @@ local reds = io.popen("pidof redshift")
 local ejecutando = reds:read("*a")
 reds:close()
 if ejecutando=="" then
-		awful.spawn.with_shell("redshift -t 6700:4500 -l 4.67:-70.06")
+		awful.spawn.with_shell("redshift -c /home/samuel/.config/redshift.conf")
 end
 ----
 awful.spawn.with_shell("/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1")
 awful.spawn.with_shell("nitrogen --restore")
+awful.spawn.with_shell("setxkbmap latam")
 
 --  awful.spawn.with_shell("/home/samuel/.local/bin/fondos &")
 -- awful.spawn.with_shell("feh --bg-fill /Archivos/A/Imágenes/Fondos_de_Pantalla/wp11")

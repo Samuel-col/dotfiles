@@ -1,8 +1,10 @@
 # Paquetes
+using OhMyREPL
+using Pkg
 using LinearAlgebra
 using Statistics
 using StatsBase
-using MultivariateStats
+#using MultivariateStats
 using Latexify
 # Saludo
 print("\e[1m\e[38;2;245;187;7;249m","#########################\n")

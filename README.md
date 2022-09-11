@@ -16,7 +16,9 @@ Here you can find my dotfiles for
 * cli-vis
 * bash
 * redshift
-* Dolphin
+* dolphin
+* zsh
+
 
 Most of the code you'll find here have been copied from several respositories, some of them are
 

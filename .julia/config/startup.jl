@@ -1,5 +1,5 @@
 # Paquetes
-using OhMyREPL
+#using OhMyREPL
 using Pkg
 using LinearAlgebra
 using Statistics

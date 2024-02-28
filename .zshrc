@@ -24,6 +24,9 @@ prompt fade
 # Resaltar sintaxis
 source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+# PATH
+export PATH=/home/samuel/julia-1.9.0/bin:$PATH
+
 # aliases
 alias ZZ="cd .."
 alias la="exa -alh -s type"
@@ -36,6 +39,9 @@ alias e="exit"
 alias android="jmtpfs"
 alias uandroid="fusermount -u"
 alias v="nvim"
-alias hdmi_l="xrandr --output HDMI1 --auto --brightness 0.5 --left-of eDP1"
-alias hdmi_r="xrandr --output HDMI1 --auto --brightness 0.5 --right-of eDP1"
-alias hdmi_s="xrandr --output HDMI1 --auto --brightness 0.5 --same-as eDP1"
+alias hdmi_l="xrandr --output HDMI1 --auto --brightness 0.1 --left-of eDP1"
+alias hdmi_r="xrandr --output HDMI1 --auto --brightness 0.1 --right-of eDP1"
+alias hdmi_s="xrandr --output HDMI1 --auto --brightness 0.1 --same-as eDP1"
+alias hdmi_off="xrandr --output HDMI1 --off"
+alias hdmi_same="xrandr --output HDMI1 --auto --same-as eDP1"
+alias hdmi_only="xrandr --output HDMI1 --auto --same-as eDP1 && xrandr --output eDP1 --off"

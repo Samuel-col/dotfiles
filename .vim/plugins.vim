@@ -8,7 +8,7 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 
 Plugin 'scrooloose/nerdtree'
-Plugin 'sheerun/vim-polyglot'
+"Plugin 'sheerun/vim-polyglot'
 
 Plugin 'lervag/vimtex'
 
@@ -25,10 +25,10 @@ Plugin 'tmhedberg/matchit'
 Plugin 'xolox/vim-misc'
 
 Plugin 'honza/vim-snippets'
-Plugin 'github/copilot.vim'
+"Plugin 'github/copilot.vim'
 "Plugin 'roxma/nvim-completion-manager'
 "Plugin 'ycm-core/YouCompleteMe'
-"Plugin 'suan/vim-instant-markdown'
+Plugin 'suan/vim-instant-markdown'
 "Plugin 'phanviet/vim-monokai-pro'
 "Plugin 'kannokanno/previm'
 Plugin 'SirVer/ultisnips'
@@ -36,4 +36,4 @@ Plugin 'SirVer/ultisnips'
 "Plugin 'https://github.com/xolox/vim-lua-ftplugin'
 
 call vundle#end()
-filetype plugin indent on
+filetype plugin indent off

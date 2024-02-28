@@ -394,6 +394,10 @@ awful.screen.connect_for_each_screen(function(s)
    -- hide_on_right_click = true
    visible = false
 }
+
+s.popup_tag:connect_signal("button::press",function () myscreen = awful.screen.focused()
+    myscreen.popup_tag.visible = not myscreen.popup_tag.visible end)
+
 ----agregar widgets
 --spotify
 -- local spotify_widget = require("awesome-wm-widgets.spotify-widget.spotify")
@@ -463,12 +467,17 @@ mitema.widget_mem = pwd.."themes/multicolor/icons/mem.png"
 local memicon = wibox.widget.imagebox(mitema.widget_mem)
 local memory = lain.widget.mem({
     settings = function()
-        widget:set_markup(markup.fontfg(mitema.font, "#e0da37", mem_now.used .. "M "))
+        widget:set_markup(markup.fontfg(mitema.font, "#e0da37", math.ceil(mem_now.used/100)/10 .. "GB "))
     end
 })
 
 memicon:connect_signal("button::press",function() awful.spawn.with_shell("alacritty -e htop")end)
 memory.widget:connect_signal("button::press",function() awful.spawn.with_shell("alacritty -e htop")end)
+
+
+-- ToDo widget
+
+--local todo_widget = require('awesome-wm-widgets.todo-widget.todo')
 
 
 -- Conexión a internet
@@ -612,8 +621,8 @@ local debianw =wibox.widget{
 				resize = true,
 				widget = wibox.widget.imagebox
 		}
-		-- apps.juli:connect_signal("button::press",function() awful.spawn("alacritty -o opacity=0.8 -e /home/samuel/julia-1.7.0/bin/julia",{floating=true}) end)
-		apps.juli:connect_signal("button::press",function() awful.spawn("alacritty -o opacity=0.8 -e julia",{floating=true}) end)
+		apps.juli:connect_signal("button::press",function() awful.spawn("alacritty -o opacity=0.8 -e /home/samuel/julia-1.8.2/bin/julia",{floating=true}) end)
+		-- apps.juli:connect_signal("button::press",function() awful.spawn("alacritty -o opacity=0.8 -e julia",{floating=true}) end)
 		
 
 		-- Opera
@@ -837,14 +846,15 @@ s.mywibox4:connect_signal("button::press",function () myscreen = awful.screen.fo
 	nil,
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-						netdownicon,
-            netdowninfo,
-            netupicon,
-            netupinfo.widget,
-						memicon,
-            memory.widget,
-						volicon,
-            mitema.volume.widget,
+		--todo_widget(),
+		netdownicon,
+		netdowninfo,
+		netupicon,
+		netupinfo.widget,
+		memicon,
+		memory.widget,
+		volicon,
+		mitema.volume.widget,
 	    battery_widget({
 	    show_current_level = true,
 	    display_notification = true,
@@ -1026,7 +1036,8 @@ globalkeys = gears.table.join(
               {description = "Abrir el micrófono", group = "sonido"}),
     awful.key({ modkey,		  }, "e", function () awful.spawn.with_shell("alacritty -e ranger") end,
 	      {description = "Abre el explorador de archivos", group = "launcher"}),
-    awful.key({ modkey,	"Shift"	  }, "e", function () awful.spawn.with_shell("pcmanfm-qt") end,
+    -- awful.key({ modkey,	"Shift"	  }, "e", function () awful.spawn.with_shell("pcmanfm-qt") end,
+    awful.key({ modkey,	"Shift"	  }, "e", function () awful.spawn.with_shell("dolphin") end,
 	      {description = "Abre el explorador de archivos gráfico", group = "launcher"}),
     awful.key({ modkey  }, "p", function () myscreen = awful.screen.focused()
               myscreen.mywibox1.visible = not myscreen.mywibox1.visible  
@@ -1039,7 +1050,13 @@ globalkeys = gears.table.join(
 		awful.key({ modkey }, "space", function() myscreen = awful.screen.focused() 
 						  myscreen.mywibox4.visible = not myscreen.mywibox4.visible end,
 						  {description = "Ver menú de apiclaciones", group = "launcher"}),
-    awful.key({ modkey,     }, "Tab", function () myscreen = awful.screen.focused() myscreen.popup_tag.visible = not myscreen.popup_tag.visible end,
+    awful.key({ modkey,     }, "Tab", function () 
+		myscreen = awful.screen.focused() 
+		myscreen.popup_tag.visible = not myscreen.popup_tag.visible
+		-- myscreen.popup_tag.visible = true
+		-- os.execute("sleep 5")
+		-- myscreen.popup_tag.visible = false
+	end,
               {description = "Ver ventanas abiertas", group="awesome"}),
 		awful.key({ modkey, "Control" }, "Right", function() awful.screen.focus_relative(1) end,
 						  {description = "Enfocar la otra pantalla", group = "screen"}),
@@ -1050,12 +1067,18 @@ globalkeys = gears.table.join(
 				-- awesome.restart()
 				end,
 					 	  {description = "Escoger distribución de monitores.", group ="screen"}),
+		-- awful.key({ modkey, }, "x", function()
+		-- 						awful.spawn("alacritty -e lua", {
+		-- 										floating  = true,
+		-- 										tag       = mouse.screen.selected_tag,
+		-- 						}) end,
+		-- 				  {description = "Abrir Lua prompt", group="awesome"}),
 		awful.key({ modkey, }, "x", function()
-								awful.spawn("alacritty -e lua", {
+								awful.spawn("alacritty -o opacity=0.8 -e /home/samuel/julia-1.9.0/bin/julia", {
 												floating  = true,
-												tag       = mouse.screen.selected_tag,
 								}) end,
 						  {description = "Abrir Lua prompt", group="awesome"}),
+-- awful.spawn("alacritty -o opacity=0.8 -e /home/samuel/julia-1.8.2/bin/julia",{floating=true})
 
 ---------------
 
